@@ -1,40 +1,26 @@
-const express = require( 'express' )
+const express = require('express')
+const { connectDatabase } = require('../database/connection')
+const routes = require('../routes/routes.js')
 
 class ModelServer {
     constructor() {
         this.app = express()
-        this.requestRouter()
+        this.initDatabase()
+        this.router()
     }
 
     initServer() {
-        this.app.listen( process.env.PORT, () => {
-            console.log( `Servidor encendido... ${ process.env.PORT }` )
-        } )
+        this.app.listen(process.env.PORT, () => {
+            console.log(`Servidor encendido... ${process.env.PORT}`)
+        })
     }
 
-    requestRouter() {
-        this.app.get( '/api/v1/player', ( req, res ) => {
-            res.send( 'Requeste type: GET (all players)' )
-        } )
-
-        this.app.get( '/api/v1/player/id', ( req, res ) => {
-            res.send( 'Requeste type: GET (one player specific)' )
-        } )
-
-        this.app.post( '/api/v1/player', ( req, res ) => {
-            res.send( 'Request type: POST (save player)' )
-        } )
-
-        this.app.put( '/api/v1/player/id', ( req, res ) => {
-            res.send( 'Request type: PUT (update player)' )
-        } )
-
-        this.app.delete( '/api/v1/player/id', ( req, res ) => {
-            res.send( 'Request type: DELETE (delete player)' )
-        } )
+    router() {
+        this.app.use('/', routes)
     }
 
-    connectDB() {
+    initDatabase() {
+        connectDatabase()
     }
 
 }
